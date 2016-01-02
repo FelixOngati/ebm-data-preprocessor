@@ -18,19 +18,18 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) { 
-      File excelFile = new File("/home/the_fegati/NetBeansProjects/ExcelReader/src/excelreader/PatientCorePopulatedTable.xlsx");
+      File excelFile = new File("/home/the_fegati/Dropbox/project/data/100-Patients/LabsCorePopulatedTable.xlsx");
         ExcelReader excelReader = new ExcelReader(excelFile);
         ArrayList<ArrayList<Object>> list = excelReader.getRowAsListFromExcel();
         
-        for(ArrayList<Object> singleRow : list){
-            int index = 0;
-            
-            while (index < singleRow.size()) {                
-                System.out.print(singleRow.get(index) + "   ");
-                index++;
-            }
-            System.out.println();
-        }
+        /*instantiate class DataExport and pass the arraylist data to be exported
+         to database*/  
+        DataExport dataExport = new DataExport();
+        //dataExport.tblPatientDetailsExport(list);
+        //dataExport.tblICD10Export(list);
+        //dataExport.tblAdmissionsExport(list);
+        //dataExport.tblAdmissionDiagnosesExport(list);
+        dataExport.tblLabsExport(list);
         
     }
 }

@@ -6,23 +6,21 @@
 package database;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -33,19 +31,20 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "TblAdmissions.findAll", query = "SELECT t FROM TblAdmissions t"),
+    @NamedQuery(name = "TblAdmissions.findById", query = "SELECT t FROM TblAdmissions t WHERE t.id = :id"),
     @NamedQuery(name = "TblAdmissions.findByAdmissionId", query = "SELECT t FROM TblAdmissions t WHERE t.admissionId = :admissionId"),
-    @NamedQuery(name = "TblAdmissions.findByPatientId", query = "SELECT t FROM TblAdmissions t WHERE t.patientId = :patientId"),
     @NamedQuery(name = "TblAdmissions.findByAdmissionStartDate", query = "SELECT t FROM TblAdmissions t WHERE t.admissionStartDate = :admissionStartDate"),
     @NamedQuery(name = "TblAdmissions.findByAdmissionEndDate", query = "SELECT t FROM TblAdmissions t WHERE t.admissionEndDate = :admissionEndDate")})
 public class TblAdmissions implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "id")
+    private Integer id;
     @Basic(optional = false)
     @Column(name = "admissionId")
     private String admissionId;
-    @Basic(optional = false)
-    @Column(name = "patientId")
-    private String patientId;
     @Basic(optional = false)
     @Column(name = "admissionStartDate")
     @Temporal(TemporalType.TIMESTAMP)
@@ -54,26 +53,30 @@ public class TblAdmissions implements Serializable {
     @Column(name = "admissionEndDate")
     @Temporal(TemporalType.TIMESTAMP)
     private Date admissionEndDate;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tblAdmissionsadmissionId")
-    private Collection<TblAdmissionDiagnoses> tblAdmissionDiagnosesCollection;
-    @JoinColumn(name = "tblPatientDetails_patientId", referencedColumnName = "patientId")
+    @JoinColumn(name = "patientId", referencedColumnName = "patientId")
     @ManyToOne(optional = false)
-    private TblPatientDetails tblPatientDetailspatientId;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tblAdmissionsadmissionId")
-    private Collection<TblLabs> tblLabsCollection;
+    private TblPatientDetails patientId;
 
     public TblAdmissions() {
     }
 
-    public TblAdmissions(String admissionId) {
-        this.admissionId = admissionId;
+    public TblAdmissions(Integer id) {
+        this.id = id;
     }
 
-    public TblAdmissions(String admissionId, String patientId, Date admissionStartDate, Date admissionEndDate) {
+    public TblAdmissions(Integer id, String admissionId, Date admissionStartDate, Date admissionEndDate) {
+        this.id = id;
         this.admissionId = admissionId;
-        this.patientId = patientId;
         this.admissionStartDate = admissionStartDate;
         this.admissionEndDate = admissionEndDate;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getAdmissionId() {
@@ -82,14 +85,6 @@ public class TblAdmissions implements Serializable {
 
     public void setAdmissionId(String admissionId) {
         this.admissionId = admissionId;
-    }
-
-    public String getPatientId() {
-        return patientId;
-    }
-
-    public void setPatientId(String patientId) {
-        this.patientId = patientId;
     }
 
     public Date getAdmissionStartDate() {
@@ -108,36 +103,18 @@ public class TblAdmissions implements Serializable {
         this.admissionEndDate = admissionEndDate;
     }
 
-    @XmlTransient
-    public Collection<TblAdmissionDiagnoses> getTblAdmissionDiagnosesCollection() {
-        return tblAdmissionDiagnosesCollection;
+    public TblPatientDetails getPatientId() {
+        return patientId;
     }
 
-    public void setTblAdmissionDiagnosesCollection(Collection<TblAdmissionDiagnoses> tblAdmissionDiagnosesCollection) {
-        this.tblAdmissionDiagnosesCollection = tblAdmissionDiagnosesCollection;
-    }
-
-    public TblPatientDetails getTblPatientDetailspatientId() {
-        return tblPatientDetailspatientId;
-    }
-
-    public void setTblPatientDetailspatientId(TblPatientDetails tblPatientDetailspatientId) {
-        this.tblPatientDetailspatientId = tblPatientDetailspatientId;
-    }
-
-    @XmlTransient
-    public Collection<TblLabs> getTblLabsCollection() {
-        return tblLabsCollection;
-    }
-
-    public void setTblLabsCollection(Collection<TblLabs> tblLabsCollection) {
-        this.tblLabsCollection = tblLabsCollection;
+    public void setPatientId(TblPatientDetails patientId) {
+        this.patientId = patientId;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (admissionId != null ? admissionId.hashCode() : 0);
+        hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
 
@@ -148,7 +125,7 @@ public class TblAdmissions implements Serializable {
             return false;
         }
         TblAdmissions other = (TblAdmissions) object;
-        if ((this.admissionId == null && other.admissionId != null) || (this.admissionId != null && !this.admissionId.equals(other.admissionId))) {
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
         return true;
@@ -156,7 +133,7 @@ public class TblAdmissions implements Serializable {
 
     @Override
     public String toString() {
-        return "database.TblAdmissions[ admissionId=" + admissionId + " ]";
+        return "database.TblAdmissions[ id=" + id + " ]";
     }
     
 }

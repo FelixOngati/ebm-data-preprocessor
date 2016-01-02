@@ -28,17 +28,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "TblAdmissionDiagnoses.findAll", query = "SELECT t FROM TblAdmissionDiagnoses t"),
-    @NamedQuery(name = "TblAdmissionDiagnoses.findByPatientId", query = "SELECT t FROM TblAdmissionDiagnoses t WHERE t.patientId = :patientId"),
     @NamedQuery(name = "TblAdmissionDiagnoses.findByAdmissionId", query = "SELECT t FROM TblAdmissionDiagnoses t WHERE t.admissionId = :admissionId"),
     @NamedQuery(name = "TblAdmissionDiagnoses.findByAdmissionDiagnosisId", query = "SELECT t FROM TblAdmissionDiagnoses t WHERE t.admissionDiagnosisId = :admissionDiagnosisId"),
     @NamedQuery(name = "TblAdmissionDiagnoses.findByDcode", query = "SELECT t FROM TblAdmissionDiagnoses t WHERE t.dcode = :dcode"),
-    @NamedQuery(name = "TblAdmissionDiagnoses.findByPrimaryDiagnosisDescription", query = "SELECT t FROM TblAdmissionDiagnoses t WHERE t.primaryDiagnosisDescription = :primaryDiagnosisDescription"),
-    @NamedQuery(name = "TblAdmissionDiagnoses.findByTblICD10dcode", query = "SELECT t FROM TblAdmissionDiagnoses t WHERE t.tblICD10dcode = :tblICD10dcode")})
+    @NamedQuery(name = "TblAdmissionDiagnoses.findByPrimaryDiagnosisDescription", query = "SELECT t FROM TblAdmissionDiagnoses t WHERE t.primaryDiagnosisDescription = :primaryDiagnosisDescription")})
 public class TblAdmissionDiagnoses implements Serializable {
     private static final long serialVersionUID = 1L;
-    @Basic(optional = false)
-    @Column(name = "patientId")
-    private String patientId;
     @Basic(optional = false)
     @Column(name = "admissionId")
     private String admissionId;
@@ -52,15 +47,9 @@ public class TblAdmissionDiagnoses implements Serializable {
     private String dcode;
     @Column(name = "primaryDiagnosisDescription")
     private String primaryDiagnosisDescription;
-    @Basic(optional = false)
-    @Column(name = "tblICD10_dcode")
-    private String tblICD10dcode;
-    @JoinColumn(name = "tblPatientDetails_patientId", referencedColumnName = "patientId")
+    @JoinColumn(name = "patientId", referencedColumnName = "patientId")
     @ManyToOne(optional = false)
-    private TblPatientDetails tblPatientDetailspatientId;
-    @JoinColumn(name = "tblAdmissions_admissionId", referencedColumnName = "admissionId")
-    @ManyToOne(optional = false)
-    private TblAdmissions tblAdmissionsadmissionId;
+    private TblPatientDetails patientId;
 
     public TblAdmissionDiagnoses() {
     }
@@ -69,20 +58,10 @@ public class TblAdmissionDiagnoses implements Serializable {
         this.admissionDiagnosisId = admissionDiagnosisId;
     }
 
-    public TblAdmissionDiagnoses(Integer admissionDiagnosisId, String patientId, String admissionId, String dcode, String tblICD10dcode) {
+    public TblAdmissionDiagnoses(Integer admissionDiagnosisId, String admissionId, String dcode) {
         this.admissionDiagnosisId = admissionDiagnosisId;
-        this.patientId = patientId;
         this.admissionId = admissionId;
         this.dcode = dcode;
-        this.tblICD10dcode = tblICD10dcode;
-    }
-
-    public String getPatientId() {
-        return patientId;
-    }
-
-    public void setPatientId(String patientId) {
-        this.patientId = patientId;
     }
 
     public String getAdmissionId() {
@@ -117,28 +96,12 @@ public class TblAdmissionDiagnoses implements Serializable {
         this.primaryDiagnosisDescription = primaryDiagnosisDescription;
     }
 
-    public String getTblICD10dcode() {
-        return tblICD10dcode;
+    public TblPatientDetails getPatientId() {
+        return patientId;
     }
 
-    public void setTblICD10dcode(String tblICD10dcode) {
-        this.tblICD10dcode = tblICD10dcode;
-    }
-
-    public TblPatientDetails getTblPatientDetailspatientId() {
-        return tblPatientDetailspatientId;
-    }
-
-    public void setTblPatientDetailspatientId(TblPatientDetails tblPatientDetailspatientId) {
-        this.tblPatientDetailspatientId = tblPatientDetailspatientId;
-    }
-
-    public TblAdmissions getTblAdmissionsadmissionId() {
-        return tblAdmissionsadmissionId;
-    }
-
-    public void setTblAdmissionsadmissionId(TblAdmissions tblAdmissionsadmissionId) {
-        this.tblAdmissionsadmissionId = tblAdmissionsadmissionId;
+    public void setPatientId(TblPatientDetails patientId) {
+        this.patientId = patientId;
     }
 
     @Override

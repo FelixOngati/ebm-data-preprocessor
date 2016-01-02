@@ -59,11 +59,11 @@ public class TblPatientDetails implements Serializable {
     private String patientLanguage;
     @Column(name = "patientPopulationPercentageBelowPoverty")
     private String patientPopulationPercentageBelowPoverty;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tblPatientDetailspatientId")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "patientId")
     private Collection<TblAdmissionDiagnoses> tblAdmissionDiagnosesCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tblPatientDetailspatientId")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "patientId")
     private Collection<TblAdmissions> tblAdmissionsCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tblPatientDetailspatientId")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "patientId")
     private Collection<TblLabs> tblLabsCollection;
 
     public TblPatientDetails() {
