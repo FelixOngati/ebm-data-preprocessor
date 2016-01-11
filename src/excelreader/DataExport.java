@@ -4,11 +4,11 @@ package excelreader;
  *
  * @author the_fegati
  */
-import database.TblAdmissionDiagnoses;
-import database.TblAdmissions;
-import database.TblICD10;
-import database.TblLabs;
-import database.TblPatientDetails;
+import database.persistence.TblAdmissionDiagnoses;
+import database.persistence.TblAdmissions;
+import database.persistence.TblICD10;
+import database.persistence.TblLabs;
+import database.persistence.TblPatientDetails;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
