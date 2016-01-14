@@ -214,7 +214,7 @@ public class DataExport {
             TblPatientDetails patient = em.getReference(TblPatientDetails.class, singleRow.get(0).toString());
             //TblAdmissions admission = em.getReference(TblAdmissions.class, (Math.round(Float.valueOf(singleRow.get(1).toString()))));
 
-            lab.setPatientId(patient);
+            lab.setPatientId(singleRow.get(0).toString());
             lab.setAdmissionId(String.valueOf(Math.round(Float.valueOf(singleRow.get(1).toString()))));
             lab.setLabName(singleRow.get(2).toString());
             lab.setLabValue((double) singleRow.get(3));

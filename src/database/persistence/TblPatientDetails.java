@@ -63,8 +63,6 @@ public class TblPatientDetails implements Serializable {
     private Collection<TblAdmissionDiagnoses> tblAdmissionDiagnosesCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "patientId")
     private Collection<TblAdmissions> tblAdmissionsCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "patientId")
-    private Collection<TblLabs> tblLabsCollection;
 
     public TblPatientDetails() {
     }
@@ -153,15 +151,6 @@ public class TblPatientDetails implements Serializable {
         this.tblAdmissionsCollection = tblAdmissionsCollection;
     }
 
-    @XmlTransient
-    public Collection<TblLabs> getTblLabsCollection() {
-        return tblLabsCollection;
-    }
-
-    public void setTblLabsCollection(Collection<TblLabs> tblLabsCollection) {
-        this.tblLabsCollection = tblLabsCollection;
-    }
-
     @Override
     public int hashCode() {
         int hash = 0;
@@ -184,7 +173,7 @@ public class TblPatientDetails implements Serializable {
 
     @Override
     public String toString() {
-        return "database.TblPatientDetails[ patientId=" + patientId + " ]";
+        return "database.persistence.TblPatientDetails[ patientId=" + patientId + " ]";
     }
     
 }

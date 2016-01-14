@@ -126,7 +126,7 @@ public class TblAdmissionDiagnoses implements Serializable {
 
     @Override
     public String toString() {
-        return "database.TblAdmissionDiagnoses[ admissionDiagnosisId=" + admissionDiagnosisId + " ]";
+        return "database.persistence.TblAdmissionDiagnoses[ admissionDiagnosisId=" + admissionDiagnosisId + " ]";
     }
     
 }

@@ -133,7 +133,7 @@ public class TblAdmissions implements Serializable {
 
     @Override
     public String toString() {
-        return "database.TblAdmissions[ id=" + id + " ]";
+        return "database.persistence.TblAdmissions[ id=" + id + " ]";
     }
     
 }

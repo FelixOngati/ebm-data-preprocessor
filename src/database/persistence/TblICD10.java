@@ -99,7 +99,7 @@ public class TblICD10 implements Serializable {
 
     @Override
     public String toString() {
-        return "database.TblICD10[ dcode=" + dcode + " ]";
+        return "database.persistence.TblICD10[ dcode=" + dcode + " ]";
     }
     
 }

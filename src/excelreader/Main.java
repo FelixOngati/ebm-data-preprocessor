@@ -5,6 +5,7 @@
  */
 package excelreader;
 
+import database.data.Fuzzification;
 import java.io.File;
 import java.util.ArrayList;
 
@@ -20,7 +21,7 @@ public class Main {
     public static void main(String[] args) { 
       File excelFile = new File("/home/the_fegati/Dropbox/project/data/100-Patients/LabsCorePopulatedTable.xlsx");
         ExcelReader excelReader = new ExcelReader(excelFile);
-        ArrayList<ArrayList<Object>> list = excelReader.getRowAsListFromExcel();
+        //ArrayList<ArrayList<Object>> list = excelReader.getRowAsListFromExcel();
         
         /*instantiate class DataExport and pass the arraylist data to be exported
          to database*/  
@@ -29,7 +30,10 @@ public class Main {
         //dataExport.tblICD10Export(list);
         //dataExport.tblAdmissionsExport(list);
         //dataExport.tblAdmissionDiagnosesExport(list);
-        dataExport.tblLabsExport(list);
+        //dataExport.tblLabsExport(list);
+        
+        Fuzzification f = new Fuzzification();
+        f.getLabsData();
         
     }
 }

@@ -4,3 +4,5 @@
 nbproject
 src/META-INF
 
+/build/
+/dist/

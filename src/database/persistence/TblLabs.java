@@ -13,8 +13,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -31,6 +29,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "TblLabs.findAll", query = "SELECT t FROM TblLabs t"),
+    @NamedQuery(name = "TblLabs.findByPatientId", query = "SELECT t FROM TblLabs t WHERE t.patientId = :patientId"),
     @NamedQuery(name = "TblLabs.findByAdmissionId", query = "SELECT t FROM TblLabs t WHERE t.admissionId = :admissionId"),
     @NamedQuery(name = "TblLabs.findByLabName", query = "SELECT t FROM TblLabs t WHERE t.labName = :labName"),
     @NamedQuery(name = "TblLabs.findByLabId", query = "SELECT t FROM TblLabs t WHERE t.labId = :labId"),
@@ -39,6 +38,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "TblLabs.findByLabDateTime", query = "SELECT t FROM TblLabs t WHERE t.labDateTime = :labDateTime")})
 public class TblLabs implements Serializable {
     private static final long serialVersionUID = 1L;
+    @Basic(optional = false)
+    @Column(name = "patientId")
+    private String patientId;
     @Basic(optional = false)
     @Column(name = "admissionId")
     private String admissionId;
@@ -59,9 +61,6 @@ public class TblLabs implements Serializable {
     @Column(name = "labDateTime")
     @Temporal(TemporalType.TIMESTAMP)
     private Date labDateTime;
-    @JoinColumn(name = "patientId", referencedColumnName = "patientId")
-    @ManyToOne(optional = false)
-    private TblPatientDetails patientId;
 
     public TblLabs() {
     }
@@ -70,12 +69,21 @@ public class TblLabs implements Serializable {
         this.labId = labId;
     }
 
-    public TblLabs(Integer labId, String admissionId, String labName, double labValue, String labUnits) {
+    public TblLabs(Integer labId, String patientId, String admissionId, String labName, double labValue, String labUnits) {
         this.labId = labId;
+        this.patientId = patientId;
         this.admissionId = admissionId;
         this.labName = labName;
         this.labValue = labValue;
         this.labUnits = labUnits;
+    }
+
+    public String getPatientId() {
+        return patientId;
+    }
+
+    public void setPatientId(String patientId) {
+        this.patientId = patientId;
     }
 
     public String getAdmissionId() {
@@ -126,14 +134,6 @@ public class TblLabs implements Serializable {
         this.labDateTime = labDateTime;
     }
 
-    public TblPatientDetails getPatientId() {
-        return patientId;
-    }
-
-    public void setPatientId(TblPatientDetails patientId) {
-        this.patientId = patientId;
-    }
-
     @Override
     public int hashCode() {
         int hash = 0;
@@ -156,7 +156,7 @@ public class TblLabs implements Serializable {
 
     @Override
     public String toString() {
-        return "database.TblLabs[ labId=" + labId + " ]";
+        return "database.persistence.TblLabs[ labId=" + labId + " ]";
     }
     
 }
