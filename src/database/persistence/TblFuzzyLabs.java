@@ -27,6 +27,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "TblFuzzyLabs.findAll", query = "SELECT t FROM TblFuzzyLabs t"),
     @NamedQuery(name = "TblFuzzyLabs.findById", query = "SELECT t FROM TblFuzzyLabs t WHERE t.id = :id"),
+    @NamedQuery(name = "TblFuzzyLabs.findByPatientId", query = "SELECT t FROM TblFuzzyLabs t WHERE t.patientId = :patientId"),
+    @NamedQuery(name = "TblFuzzyLabs.findByAdmissionId", query = "SELECT t FROM TblFuzzyLabs t WHERE t.admissionId = :admissionId"),
     @NamedQuery(name = "TblFuzzyLabs.findByGender", query = "SELECT t FROM TblFuzzyLabs t WHERE t.gender = :gender"),
     @NamedQuery(name = "TblFuzzyLabs.findByAge", query = "SELECT t FROM TblFuzzyLabs t WHERE t.age = :age"),
     @NamedQuery(name = "TblFuzzyLabs.findByRace", query = "SELECT t FROM TblFuzzyLabs t WHERE t.race = :race"),
@@ -72,6 +74,12 @@ public class TblFuzzyLabs implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
+    @Basic(optional = false)
+    @Column(name = "patientId")
+    private String patientId;
+    @Basic(optional = false)
+    @Column(name = "admissionId")
+    private int admissionId;
     @Basic(optional = false)
     @Column(name = "gender")
     private String gender;
@@ -162,10 +170,8 @@ public class TblFuzzyLabs implements Serializable {
     @Basic(optional = false)
     @Column(name = "metabolic_anion_gap")
     private String metabolicAnionGap;
-    @Basic(optional = false)
     @Column(name = "cbc_hematocrit")
     private String cbcHematocrit;
-    @Basic(optional = false)
     @Column(name = "metabolic_creatinine")
     private String metabolicCreatinine;
     @Basic(optional = false)
@@ -194,8 +200,10 @@ public class TblFuzzyLabs implements Serializable {
         this.id = id;
     }
 
-    public TblFuzzyLabs(Integer id, String gender, int age, String race, String maritalStatus, double povertyindex, String urinalysisRbc, String metabolicGlucose, String metabolicCalcium, String cbcRbcCount, String urinalysisPh, String metabolicTotalProtein, String metabolicChloride, String cbcLymphocytes, String metabolicSodium, String urinalysisSpecificGravity, String metabolicBiliTotal, String urinalysisWbc, String cbcEosinophils, String metabolicAlkPhos, String cbcRdw, String metabolicAstSgot, String cbcNeutrophils, String cbcBasophils, String cbcMonocytes, String cbcMch, String metabolicBun, String cbcWbcCount, String cbcPlateletCount, String metabolicPotassium, String metabolicAnionGap, String cbcHematocrit, String metabolicCreatinine, String cbcHemoglobin, String cbcAbsoluteLymphocytes, String metabolicCarbonDioxide, String cbcAbsoluteNeutrophils, String metabolicAlbumin, String cbcMchc) {
+    public TblFuzzyLabs(Integer id, String patientId, int admissionId, String gender, int age, String race, String maritalStatus, double povertyindex, String urinalysisRbc, String metabolicGlucose, String metabolicCalcium, String cbcRbcCount, String urinalysisPh, String metabolicTotalProtein, String metabolicChloride, String cbcLymphocytes, String metabolicSodium, String urinalysisSpecificGravity, String metabolicBiliTotal, String urinalysisWbc, String cbcEosinophils, String metabolicAlkPhos, String cbcRdw, String metabolicAstSgot, String cbcNeutrophils, String cbcBasophils, String cbcMonocytes, String cbcMch, String metabolicBun, String cbcWbcCount, String cbcPlateletCount, String metabolicPotassium, String metabolicAnionGap, String cbcHemoglobin, String cbcAbsoluteLymphocytes, String metabolicCarbonDioxide, String cbcAbsoluteNeutrophils, String metabolicAlbumin, String cbcMchc) {
         this.id = id;
+        this.patientId = patientId;
+        this.admissionId = admissionId;
         this.gender = gender;
         this.age = age;
         this.race = race;
@@ -226,8 +234,6 @@ public class TblFuzzyLabs implements Serializable {
         this.cbcPlateletCount = cbcPlateletCount;
         this.metabolicPotassium = metabolicPotassium;
         this.metabolicAnionGap = metabolicAnionGap;
-        this.cbcHematocrit = cbcHematocrit;
-        this.metabolicCreatinine = metabolicCreatinine;
         this.cbcHemoglobin = cbcHemoglobin;
         this.cbcAbsoluteLymphocytes = cbcAbsoluteLymphocytes;
         this.metabolicCarbonDioxide = metabolicCarbonDioxide;
@@ -242,6 +248,22 @@ public class TblFuzzyLabs implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getPatientId() {
+        return patientId;
+    }
+
+    public void setPatientId(String patientId) {
+        this.patientId = patientId;
+    }
+
+    public int getAdmissionId() {
+        return admissionId;
+    }
+
+    public void setAdmissionId(int admissionId) {
+        this.admissionId = admissionId;
     }
 
     public String getGender() {

@@ -5,14 +5,10 @@
  */
 package database.data;
 
-import database.persistence.TblLabs;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 /**
@@ -35,13 +31,26 @@ public class CustomQueries {
 
     public List<Object[]> getLabs(String patientId, String admissionId) {
         TypedQuery<Object[]> query = em.createQuery(
-                "select p.patientId, l.admissionId, l.labName, l.labValue"
+                "select p.patientId, l.admissionId, l.labName, l.labValue, l.labDateTime"
                 + " from TblPatientDetails p INNER JOIN TblLabs l on "
                 + "p.patientId = l.patientId where p.patientId = :patientId "
                 + "and l.admissionId = :admissionId", Object[].class);
         query.setParameter("patientId", patientId);
         query.setParameter("admissionId", admissionId);
         List<Object[]> list = query.getResultList();
+        return list;
+    }
+    
+    public List<Object[]> getPatientDetails(String patientId){
+        TypedQuery<Object[]> query = em.createQuery(
+                "SELECT p.patientId, p.patientGender, p.patientDOB, p.patientRace, "
+                        + "p.patientMaritalStatus, p.patientLanguage, "
+                        + "p.patientPopulationPercentageBelowPoverty "
+                        + "FROM TblPatientDetails p WHERE p.patientId =:patientId", Object[].class
+        );
+        query.setParameter("patientId", patientId);
+        List<Object[]> list = query.getResultList();
+        
         return list;
     }
 

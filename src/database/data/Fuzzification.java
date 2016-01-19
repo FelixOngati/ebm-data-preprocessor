@@ -5,9 +5,7 @@
  */
 package database.data;
 
-import database.persistence.TblLabs;
-import java.util.ArrayList;
-import java.util.Iterator;
+import database.persistence.TblFuzzyLabs;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -21,6 +19,7 @@ public class Fuzzification {
 
     int startRow = 0;
     CustomQueries cq = new CustomQueries();
+    TblFuzzyLabs fuzzyLabs = new TblFuzzyLabs();
 
     EntityManagerFactory emf = Persistence.createEntityManagerFactory("ExcelReaderPU");
     EntityManager em = emf.createEntityManager();
@@ -37,168 +36,333 @@ public class Fuzzification {
             //get labs data for this encounter
             List<Object[]> labEncounter = cq.getLabs(lab[0].toString(), lab[1].toString());
             //call fuzzify on the returned llab data
+            List<Object[]> patientDetails = cq.getPatientDetails(lab[0].toString());
+            for (Object[] detail : patientDetails) {
+                fuzzyLabs.setGender(detail[1].toString());
+                fuzzyLabs.setRace(detail[3].toString());
+                fuzzyLabs.setMaritalStatus(detail[4].toString());
+                fuzzyLabs.setPovertyindex(Double.valueOf(detail[6].toString()));
+            }
             fuzzify(labEncounter);
+
         }
     }
 
     //assign the real values to fuzzy sets
     private void fuzzify(List<Object[]> labEncounter) {
         for (Object[] lab : labEncounter) {
-//            System.out.println(lab[0]+"   "+lab[1]+"    "+lab[2]+"    "+lab[3]);
+            fuzzyLabs.setPatientId(lab[0].toString());
+            fuzzyLabs.setAdmissionId(Integer.valueOf(lab[1].toString()));
             switch (lab[2].toString().trim()) {
                 case "URINALYSIS: RED BLOOD CELLS":
                     if (Double.valueOf(lab[3].toString()) < 2) {
-                        System.out.println(lab[2] + "     Low");
+                        fuzzyLabs.setUrinalysisRbc("low");
                     } else if (Double.valueOf(lab[3].toString()) > 3) {
-                        System.out.println(lab[2] + "     High");
+                        fuzzyLabs.setUrinalysisRbc("high");
                     } else {
-                        System.out.println(lab[2] + "     Normal");
+                        fuzzyLabs.setUrinalysisRbc("normal");
                     }
                     break;
                 case "METABOLIC: GLUCOSE":
                     if (Double.valueOf(lab[3].toString()) < 64) {
-                        System.out.println(lab[2] + "     Low");
+                        fuzzyLabs.setMetabolicGlucose("low");
                     } else if (Double.valueOf(lab[3].toString()) > 100) {
-                        System.out.println(lab[2] + "     High");
+                        fuzzyLabs.setMetabolicGlucose("high");
                     } else {
-                        System.out.println(lab[2] + "     Normal");
+                        fuzzyLabs.setMetabolicGlucose("normal");
                     }
                     break;
                 case "METABOLIC: CALCIUM":
                     if (Double.valueOf(lab[3].toString()) < 8.5) {
-                        System.out.println(lab[2] + "     Low");
+                        fuzzyLabs.setMetabolicCalcium("low");
                     } else if (Double.valueOf(lab[3].toString()) > 10.2) {
-                        System.out.println(lab[2] + "     High");
+                        fuzzyLabs.setMetabolicCalcium("high");
                     } else {
-                        System.out.println(lab[2] + "     Normal");
+                        fuzzyLabs.setMetabolicCalcium("normal");
                     }
                     break;
                 case "CBC: RED BLOOD CELL COUNT":
                     if (Double.valueOf(lab[3].toString()) < 4.1) {
-                        System.out.println(lab[2] + "     Low");
+                        fuzzyLabs.setCbcRbcCount("low");
                     } else if (Double.valueOf(lab[3].toString()) > 5.9) {
-                        System.out.println(lab[2] + "     High");
+                        fuzzyLabs.setCbcRbcCount("high");
                     } else {
-                        System.out.println(lab[2] + "     Normal");
+                        fuzzyLabs.setCbcRbcCount("normal");
                     }
                     break;
                 case "URINALYSIS: PH":
                     if (Double.valueOf(lab[3].toString()) < 4.6) {
-                        System.out.println(lab[2] + "     Low");
+                        fuzzyLabs.setUrinalysisPh("low");
                     } else if (Double.valueOf(lab[3].toString()) > 8) {
-                        System.out.println(lab[2] + "     High");
+                        fuzzyLabs.setUrinalysisPh("high");
                     } else {
-                        System.out.println(lab[2] + "     Normal");
+                        fuzzyLabs.setUrinalysisPh("normal");
                     }
                     break;
                 case "METABOLIC: TOTAL PROTEIN":
                     if (Double.valueOf(lab[3].toString()) < 6) {
-                        System.out.println(lab[2] + "     Low");
+                        fuzzyLabs.setMetabolicTotalProtein("low");
                     } else if (Double.valueOf(lab[3].toString()) > 8.3) {
-                        System.out.println(lab[2] + "     High");
+                        fuzzyLabs.setMetabolicTotalProtein("high");
                     } else {
-                        System.out.println(lab[2] + "     Normal");
+                        fuzzyLabs.setMetabolicTotalProtein("normal");
                     }
                     break;
                 case "METABOLIC: CHLORIDE":
                     if (Double.valueOf(lab[3].toString()) < 101) {
-                        System.out.println(lab[2] + "     Low");
+                        fuzzyLabs.setMetabolicChloride("low");
                     } else if (Double.valueOf(lab[3].toString()) > 111) {
-                        System.out.println(lab[2] + "     High");
+                        fuzzyLabs.setMetabolicChloride("high");
                     } else {
-                        System.out.println(lab[2] + "     Normal");
+                        fuzzyLabs.setMetabolicChloride("normal");
                     }
                     break;
                 case "CBC: LYMPHOCYTES":
                     if (Double.valueOf(lab[3].toString()) < 0.8) {
-                        System.out.println(lab[2] + "     Low");
+                        fuzzyLabs.setCbcLymphocytes("low");
                     } else if (Double.valueOf(lab[3].toString()) > 5) {
-                        System.out.println(lab[2] + "     High");
+                        fuzzyLabs.setCbcLymphocytes("high");
                     } else {
-                        System.out.println(lab[2] + "     Normal");
+                        fuzzyLabs.setCbcLymphocytes("normal");
                     }
                     break;
                 case "METABOLIC: SODIUM":
                     if (Double.valueOf(lab[3].toString()) < 136) {
-                        System.out.println(lab[2] + "     Low");
+                        fuzzyLabs.setMetabolicSodium("low");
                     } else if (Double.valueOf(lab[3].toString()) > 144) {
-                        System.out.println(lab[2] + "     High");
+                        fuzzyLabs.setMetabolicSodium("high");
                     } else {
-                        System.out.println(lab[2] + "     Normal");
+                        fuzzyLabs.setMetabolicSodium("normal");
                     }
                     break;
                 case "URINALYSIS: SPECIFIC GRAVITY":
                     if (Double.valueOf(lab[3].toString()) < 1.005) {
-                        System.out.println(lab[2] + "     Low");
+                        fuzzyLabs.setUrinalysisSpecificGravity("low");
                     } else if (Double.valueOf(lab[3].toString()) > 1.035) {
-                        System.out.println(lab[2] + "     High");
+                        fuzzyLabs.setUrinalysisSpecificGravity("high");
                     } else {
-                        System.out.println(lab[2] + "     Normal");
+                        fuzzyLabs.setUrinalysisSpecificGravity("normal");
                     }
                     break;
                 case "METABOLIC: BILI TOTAL":
                     if (Double.valueOf(lab[3].toString()) < 0.3) {
-                        System.out.println(lab[2] + "     Low");
+                        fuzzyLabs.setMetabolicBiliTotal("low");
                     } else if (Double.valueOf(lab[3].toString()) > 1.9) {
-                        System.out.println(lab[2] + "     High");
+                        fuzzyLabs.setMetabolicBiliTotal("high");
                     } else {
-                        System.out.println(lab[2] + "     Normal");
+                        fuzzyLabs.setMetabolicBiliTotal("normal");
                     }
                     break;
                 case "URINALYSIS: WHITE BLOOD CELLS":
                     if (Double.valueOf(lab[3].toString()) < 2) {
-                        System.out.println(lab[2] + "     Low");
+                        fuzzyLabs.setUrinalysisWbc("low");
                     } else if (Double.valueOf(lab[3].toString()) > 5) {
-                        System.out.println(lab[2] + "     High");
+                        fuzzyLabs.setUrinalysisWbc("high");
                     } else {
-                        System.out.println(lab[2] + "     Normal");
+                        fuzzyLabs.setUrinalysisWbc("normal");
                     }
                     break;
                 case "CBC: EOSINOPHILS":
                     if (Double.valueOf(lab[3].toString()) < 0) {
-                        System.out.println(lab[2] + "     Low");
+                        fuzzyLabs.setCbcEosinophils("low");
                     } else if (Double.valueOf(lab[3].toString()) > 0.8) {
-                        System.out.println(lab[2] + "     High");
+                        fuzzyLabs.setCbcEosinophils("high");
                     } else {
-                        System.out.println(lab[2] + "     Normal");
+                        fuzzyLabs.setCbcEosinophils("normal");
                     }
                     break;
                 case "METABOLIC: ALK PHOS":
                     if (Double.valueOf(lab[3].toString()) < 44) {
-                        System.out.println(lab[2] + "     Low");
+                        fuzzyLabs.setMetabolicAlkPhos("low");
                     } else if (Double.valueOf(lab[3].toString()) > 147) {
-                        System.out.println(lab[2] + "     High");
+                        fuzzyLabs.setMetabolicAlkPhos("high");
                     } else {
-                        System.out.println(lab[2] + "     Normal");
+                        fuzzyLabs.setMetabolicAlkPhos("normal");
                     }
                     break;
                 case "CBC: RDW":
                     if (Double.valueOf(lab[3].toString()) < 11.5) {
-                        System.out.println(lab[2] + "     Low");
+                        fuzzyLabs.setCbcRdw("low");
                     } else if (Double.valueOf(lab[3].toString()) > 14.5) {
-                        System.out.println(lab[2] + "     High");
+                        fuzzyLabs.setCbcRdw("high");
                     } else {
-                        System.out.println(lab[2] + "     Normal");
+                        fuzzyLabs.setCbcRdw("normal");
                     }
                     break;
                 case "METABOLIC: AST/SGOT":
                     if (Double.valueOf(lab[3].toString()) < 10) {
-                        System.out.println(lab[2] + "     Low");
+                        fuzzyLabs.setMetabolicAstSgot("low");
                     } else if (Double.valueOf(lab[3].toString()) > 34) {
-                        System.out.println(lab[2] + "     High");
+                        fuzzyLabs.setMetabolicAstSgot("high");
                     } else {
-                        System.out.println(lab[2] + "     Normal");
+                        fuzzyLabs.setMetabolicAstSgot("normal");
+                    }
+                    break;
+                case "CBC: NEUTROPHILS":
+                    if (Double.valueOf(lab[3].toString()) < 1.8) {
+                        fuzzyLabs.setCbcNeutrophils("low");
+                    } else if (Double.valueOf(lab[3].toString()) > 8.3) {
+                        fuzzyLabs.setCbcNeutrophils("high");
+                    } else {
+                        fuzzyLabs.setCbcNeutrophils("normal");
+                    }
+                    break;
+                case "CBC: BASOPHILS":
+                    if (Double.valueOf(lab[3].toString()) < 0) {
+                        fuzzyLabs.setCbcBasophils("low");
+                    } else if (Double.valueOf(lab[3].toString()) > 0.1) {
+                        fuzzyLabs.setCbcBasophils("high");
+                    } else {
+                        fuzzyLabs.setCbcBasophils("normal");
+                    }
+                    break;
+                case "CBC: MONOCYTES":
+                    if (Double.valueOf(lab[3].toString()) < 0.4) {
+                        fuzzyLabs.setCbcMonocytes("low");
+                    } else if (Double.valueOf(lab[3].toString()) > 1) {
+                        fuzzyLabs.setCbcMonocytes("high");
+                    } else {
+                        fuzzyLabs.setCbcMonocytes("normal");
+                    }
+                    break;
+                case "CBC: MCH":
+                    if (Double.valueOf(lab[3].toString()) < 28) {
+                        fuzzyLabs.setCbcMch("low");
+                    } else if (Double.valueOf(lab[3].toString()) > 33) {
+                        fuzzyLabs.setCbcMch("high");
+                    } else {
+                        fuzzyLabs.setCbcMch("normal");
+                    }
+                    break;
+                case "METABOLIC: BUN":
+                    if (Double.valueOf(lab[3].toString()) < 7) {
+                        fuzzyLabs.setMetabolicBun("low");
+                    } else if (Double.valueOf(lab[3].toString()) > 20) {
+                        fuzzyLabs.setMetabolicBun("high");
+                    } else {
+                        fuzzyLabs.setMetabolicBun("normal");
+                    }
+                    break;
+                case "CBC: WHITE BLOOD CELL COUNT":
+                    if (Double.valueOf(lab[3].toString()) < 4.3) {
+                        fuzzyLabs.setCbcWbcCount("low");
+                    } else if (Double.valueOf(lab[3].toString()) > 10.8) {
+                        fuzzyLabs.setCbcWbcCount("high");
+                    } else {
+                        fuzzyLabs.setCbcWbcCount("normal");
+                    }
+                    break;
+                case "CBC: PLATELET COUNT":
+                    if (Double.valueOf(lab[3].toString()) < 150) {
+                        fuzzyLabs.setCbcPlateletCount("low");
+                    } else if (Double.valueOf(lab[3].toString()) > 350) {
+                        fuzzyLabs.setCbcPlateletCount("high");
+                    } else {
+                        fuzzyLabs.setCbcPlateletCount("normal");
+                    }
+                    break;
+                case "METABOLIC: POTASSIUM":
+                    if (Double.valueOf(lab[3].toString()) < 3.7) {
+                        fuzzyLabs.setMetabolicPotassium("low");
+                    } else if (Double.valueOf(lab[3].toString()) > 5.2) {
+                        fuzzyLabs.setMetabolicPotassium("high");
+                    } else {
+                        fuzzyLabs.setMetabolicPotassium("normal");
+                    }
+                    break;
+                case "METABOLIC: ANION GAP":
+                    if (Double.valueOf(lab[3].toString()) < 8) {
+                        fuzzyLabs.setMetabolicAnionGap("low");
+                    } else if (Double.valueOf(lab[3].toString()) > 16) {
+                        fuzzyLabs.setMetabolicAnionGap("high");
+                    } else {
+                        fuzzyLabs.setMetabolicAnionGap("normal");
+                    }
+                    break;
+                case "CBC: HEMOGLOBIN":
+                    if (Double.valueOf(lab[3].toString()) < 12) {
+                        fuzzyLabs.setCbcHemoglobin("low");
+                    } else if (Double.valueOf(lab[3].toString()) > 18) {
+                        fuzzyLabs.setCbcHemoglobin("high");
+                    } else {
+                        fuzzyLabs.setCbcHemoglobin("normal");
+                    }
+                    break;
+                case "CBC: HEMATOCTRIT":
+                    if (Double.valueOf(lab[3].toString()) < 37) {
+                        fuzzyLabs.setCbcHematocrit("low");
+                    } else if (Double.valueOf(lab[3].toString()) > 52) {
+                        fuzzyLabs.setCbcHematocrit("high");
+                    } else {
+                        fuzzyLabs.setCbcHematocrit("normal");
+                    }
+                    break;
+                case "CBC: ABSOLUTE LYMPHOCYTES":
+                    if (Double.valueOf(lab[3].toString()) < 18) {
+                        fuzzyLabs.setCbcAbsoluteLymphocytes("low");
+                    } else if (Double.valueOf(lab[3].toString()) > 45) {
+                        fuzzyLabs.setCbcAbsoluteLymphocytes("high");
+                    } else {
+                        fuzzyLabs.setCbcAbsoluteLymphocytes("normal");
+                    }
+                    break;
+                case "METABOLIC: CARBON DIOXIDE":
+                    if (Double.valueOf(lab[3].toString()) < 20) {
+                        fuzzyLabs.setMetabolicCarbonDioxide("low");
+                    } else if (Double.valueOf(lab[3].toString()) > 29) {
+                        fuzzyLabs.setMetabolicCarbonDioxide("high");
+                    } else {
+                        fuzzyLabs.setMetabolicCarbonDioxide("normal");
+                    }
+                    break;
+                case "CBC: ABSOLUTE NEUTROPHILS":
+                    if (Double.valueOf(lab[3].toString()) < 45) {
+                        fuzzyLabs.setCbcAbsoluteNeutrophils("low");
+                    } else if (Double.valueOf(lab[3].toString()) > 74) {
+                        fuzzyLabs.setCbcAbsoluteNeutrophils("high");
+                    } else {
+                        fuzzyLabs.setCbcAbsoluteNeutrophils("normal");
+                    }
+                    break;
+                case "METABOLIC: ALBUMIN":
+                    if (Double.valueOf(lab[3].toString()) < 3.4) {
+                        fuzzyLabs.setMetabolicAlbumin("low");
+                    } else if (Double.valueOf(lab[3].toString()) > 5.4) {
+                        fuzzyLabs.setMetabolicAlbumin("high");
+                    } else {
+                        fuzzyLabs.setMetabolicAlbumin("normal");
+                    }
+                    break;
+                case "CBC: MCHC":
+                    if (Double.valueOf(lab[3].toString()) < 32) {
+                        fuzzyLabs.setCbcMchc("low");
+                    } else if (Double.valueOf(lab[3].toString()) > 36) {
+                        fuzzyLabs.setCbcMchc("high");
+                    } else {
+                        fuzzyLabs.setCbcMchc("normal");
+                    }
+                    break;
+                case "METABOLIC: CREATININE":
+                    if (Double.valueOf(lab[3].toString()) < 0.6) {
+                        fuzzyLabs.setCbcMchc("low");
+                    } else if (Double.valueOf(lab[3].toString()) > 1.3) {
+                        fuzzyLabs.setCbcMchc("high");
+                    } else {
+                        fuzzyLabs.setCbcMchc("normal");
                     }
                     break;
 
             }
         }
-        System.exit(0);
+        persist(fuzzyLabs);
     }
 
     //persists fuzzified data to tblFuzzyLabs
-    public void persist() {
-
+    public void persist(TblFuzzyLabs fuzzyLabs) {
+        em.getTransaction().begin();
+        em.persist(fuzzyLabs);
+        em.getTransaction().commit();
+        em.clear();
     }
 
 }
