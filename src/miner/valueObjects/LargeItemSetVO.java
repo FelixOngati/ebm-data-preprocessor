@@ -1,4 +1,4 @@
-package java.valueObjects;
+package miner.valueObjects;
 
 import java.util.Set;
 
@@ -68,6 +68,10 @@ public class LargeItemSetVO implements Comparable<LargeItemSetVO>{
                         return 1;
                 return 0;
         }
+
+    public int size() {
+        return 0;
+    }
         
         
         

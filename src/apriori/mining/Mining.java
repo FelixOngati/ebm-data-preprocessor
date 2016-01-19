@@ -1,6 +1,6 @@
-package java.mining;
+package apriori.mining;
 
-import java.helper.DataHelper;
+import miner.mining.helper.DataHelper;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -9,8 +9,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.valueObjects.AssociationObject;
-import java.valueObjects.LargeItemSetVO;
+import miner.valueObjects.AssociationObject;
+import miner.valueObjects.LargeItemSetVO;
 
 public class Mining {
     /*Hold the resultant large itemset */
@@ -24,18 +24,17 @@ public class Mining {
     PrintWriter out;
 
     public Mining() {
-        largeItemSet = new HashSet<Set<String>>();
-        fileMap = new HashMap<Integer, Set<String>>();
-        currentItemSet = new HashSet<Set<String>>();
+        largeItemSet = new HashSet<>();
+        fileMap = new HashMap<>();
+        currentItemSet = new HashSet<>();
     }
 
-    
     public void doMining(Double minSupport, Double minConfidence, ArrayList<ArrayList<String>> columns, PrintWriter out) throws IOException {
         this.out = out;
         Set<String> lineSet;
         Integer lineCount = 0;
         for (int i = 0; i < columns.get(0).size(); i++) {
-            lineSet = new HashSet<String>();
+            lineSet = new HashSet<>();
             ++lineCount;
             int j = 0;
             while (j < columns.size()) {
@@ -48,6 +47,7 @@ public class Mining {
             }
             fileMap.put(lineCount, lineSet);
         }
+//        System.exit(0);
 
         DataHelper.setNumTransactions(lineCount);
         currentItemSet = DataHelper.getLOneSet();
@@ -66,20 +66,22 @@ public class Mining {
      * private method to generate association rules
      */
     private void generateAssociationRules(Double minConfidence) {
-        ArrayList<AssociationObject> associations = new ArrayList<AssociationObject>();
-        ArrayList<LargeItemSetVO> set = new ArrayList<LargeItemSetVO>(DataHelper.getLargeItemSetWithSupport());
+        ArrayList<AssociationObject> associations = new ArrayList<>();
+        ArrayList<LargeItemSetVO> set = new ArrayList<>(DataHelper.getLargeItemSetWithSupport());
         for (LargeItemSetVO vo : set) {
             /* Get one item on the rhs */
             if (vo.getItems().size() == 1) {
                 String item = vo.getItems().iterator().next();
+                System.out.println(item);
                 for (LargeItemSetVO other : set) {
-                    if (other.getItems().contains(item) && other.getItems().size() > 1) {
+                    System.out.println(other.getItems());
+                    if (other.getItems().contains(item) && other.getItems().size() >0) {
                         /*Propose an association if we have required  confidence*/
-
-                        Set<String> toOutput = new HashSet<String>(other.getItems());
+                        System.out.println(other.getItems()+"here");
+                        Set<String> toOutput = new HashSet<>(other.getItems());
                         toOutput.remove(item);
-                        if ((other.getSupport().doubleValue() / DataHelper.getSupport(toOutput).doubleValue()) >= minConfidence) {
-                            associations.add(new AssociationObject(toOutput, vo.getItems(), (other.getSupport().doubleValue() / DataHelper.getSupport(toOutput).doubleValue()), other.getSupport()));
+                        if ((other.getSupport() / DataHelper.getSupport(toOutput)) >= minConfidence) {
+                            associations.add(new AssociationObject(toOutput, vo.getItems(), (other.getSupport() / DataHelper.getSupport(toOutput)), other.getSupport()));
                         }
                     }
                 }
@@ -91,12 +93,13 @@ public class Mining {
 
     private void printAssociations(ArrayList<AssociationObject> associations) {
         for (AssociationObject obj : associations) {
+            System.out.println(obj + "hehehehe");
             out.println(obj.getLhs() + " => " + obj.getRhs() + " (conf:" + obj.getConfidence() * 100 + "% supp:" + obj.getSupport() * 100 + "% )</br>");
         }
     }
 
     public void printLargeItemSet() {
-        ArrayList<LargeItemSetVO> set = new ArrayList<LargeItemSetVO>(DataHelper.getLargeItemSetWithSupport());
+        ArrayList<LargeItemSetVO> set = new ArrayList<>(DataHelper.getLargeItemSetWithSupport());
         Collections.sort(set);
         for (LargeItemSetVO vo : set) {
             out.println(vo.getItems().toString() + ", " + vo.getSupport() * 100 + "%</br>");
@@ -104,13 +107,13 @@ public class Mining {
     }
 
     public Set<Set<String>> getNextLevelItemSet(Set<Set<String>> curItemSet) {
-        Set<Set<String>> cloneSet = new HashSet<Set<String>>(curItemSet);
-        Set<Set<String>> nextLevel = new HashSet<Set<String>>();
+        Set<Set<String>> cloneSet = new HashSet<>(curItemSet);
+        Set<Set<String>> nextLevel = new HashSet<>();
 
         for (Set<String> set : curItemSet) {
             for (Set<String> set1 : cloneSet) {
                 if (!set.equals(set1)) {
-                    Set<String> toAdd = new HashSet<String>(set);
+                    Set<String> toAdd = new HashSet<>(set);
                     toAdd.addAll(set1);
                     nextLevel.add(toAdd);
                 }

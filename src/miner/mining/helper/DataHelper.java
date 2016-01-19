@@ -1,10 +1,10 @@
-package java.helper;
+package miner.mining.helper;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.valueObjects.LargeItemSetVO;
+import miner.valueObjects.LargeItemSetVO;
 
 public class DataHelper {
         private static HashMap<String, Integer> frequencyMap;

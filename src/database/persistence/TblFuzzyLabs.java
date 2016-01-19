@@ -66,7 +66,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "TblFuzzyLabs.findByMetabolicCarbonDioxide", query = "SELECT t FROM TblFuzzyLabs t WHERE t.metabolicCarbonDioxide = :metabolicCarbonDioxide"),
     @NamedQuery(name = "TblFuzzyLabs.findByCbcAbsoluteNeutrophils", query = "SELECT t FROM TblFuzzyLabs t WHERE t.cbcAbsoluteNeutrophils = :cbcAbsoluteNeutrophils"),
     @NamedQuery(name = "TblFuzzyLabs.findByMetabolicAlbumin", query = "SELECT t FROM TblFuzzyLabs t WHERE t.metabolicAlbumin = :metabolicAlbumin"),
-    @NamedQuery(name = "TblFuzzyLabs.findByCbcMchc", query = "SELECT t FROM TblFuzzyLabs t WHERE t.cbcMchc = :cbcMchc")})
+    @NamedQuery(name = "TblFuzzyLabs.findByCbcMchc", query = "SELECT t FROM TblFuzzyLabs t WHERE t.cbcMchc = :cbcMchc"),
+    @NamedQuery(name = "TblFuzzyLabs.findByDiagnosis", query = "SELECT t FROM TblFuzzyLabs t WHERE t.diagnosis = :diagnosis")})
 public class TblFuzzyLabs implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -95,103 +96,75 @@ public class TblFuzzyLabs implements Serializable {
     @Basic(optional = false)
     @Column(name = "povertyindex")
     private double povertyindex;
-    @Basic(optional = false)
     @Column(name = "urinalysis_rbc")
     private String urinalysisRbc;
-    @Basic(optional = false)
     @Column(name = "metabolic_glucose")
     private String metabolicGlucose;
-    @Basic(optional = false)
     @Column(name = "metabolic_calcium")
     private String metabolicCalcium;
-    @Basic(optional = false)
     @Column(name = "cbc_rbc_count")
     private String cbcRbcCount;
-    @Basic(optional = false)
     @Column(name = "urinalysis_ph")
     private String urinalysisPh;
-    @Basic(optional = false)
     @Column(name = "metabolic_total_protein")
     private String metabolicTotalProtein;
-    @Basic(optional = false)
     @Column(name = "metabolic_chloride")
     private String metabolicChloride;
-    @Basic(optional = false)
     @Column(name = "cbc_lymphocytes")
     private String cbcLymphocytes;
-    @Basic(optional = false)
     @Column(name = "metabolic_sodium")
     private String metabolicSodium;
-    @Basic(optional = false)
     @Column(name = "urinalysis_specific_gravity")
     private String urinalysisSpecificGravity;
-    @Basic(optional = false)
     @Column(name = "metabolic_bili_total")
     private String metabolicBiliTotal;
-    @Basic(optional = false)
     @Column(name = "urinalysis_wbc")
     private String urinalysisWbc;
-    @Basic(optional = false)
     @Column(name = "cbc_eosinophils")
     private String cbcEosinophils;
-    @Basic(optional = false)
     @Column(name = "metabolic_alk_phos")
     private String metabolicAlkPhos;
-    @Basic(optional = false)
     @Column(name = "cbc_rdw")
     private String cbcRdw;
-    @Basic(optional = false)
     @Column(name = "metabolic_ast_sgot")
     private String metabolicAstSgot;
-    @Basic(optional = false)
     @Column(name = "cbc_neutrophils")
     private String cbcNeutrophils;
-    @Basic(optional = false)
     @Column(name = "cbc_basophils")
     private String cbcBasophils;
-    @Basic(optional = false)
     @Column(name = "cbc_monocytes")
     private String cbcMonocytes;
-    @Basic(optional = false)
     @Column(name = "cbc_mch")
     private String cbcMch;
-    @Basic(optional = false)
     @Column(name = "metabolic_bun")
     private String metabolicBun;
-    @Basic(optional = false)
     @Column(name = "cbc_wbc_count")
     private String cbcWbcCount;
-    @Basic(optional = false)
     @Column(name = "cbc_platelet_count")
     private String cbcPlateletCount;
-    @Basic(optional = false)
     @Column(name = "metabolic_potassium")
     private String metabolicPotassium;
-    @Basic(optional = false)
     @Column(name = "metabolic_anion_gap")
     private String metabolicAnionGap;
     @Column(name = "cbc_hematocrit")
     private String cbcHematocrit;
     @Column(name = "metabolic_creatinine")
     private String metabolicCreatinine;
-    @Basic(optional = false)
     @Column(name = "cbc_hemoglobin")
     private String cbcHemoglobin;
-    @Basic(optional = false)
     @Column(name = "cbc_absolute_lymphocytes")
     private String cbcAbsoluteLymphocytes;
-    @Basic(optional = false)
     @Column(name = "metabolic_carbon_dioxide")
     private String metabolicCarbonDioxide;
-    @Basic(optional = false)
     @Column(name = "cbc_absolute_neutrophils")
     private String cbcAbsoluteNeutrophils;
-    @Basic(optional = false)
     @Column(name = "metabolic_albumin")
     private String metabolicAlbumin;
-    @Basic(optional = false)
     @Column(name = "cbc_mchc")
     private String cbcMchc;
+    @Basic(optional = false)
+    @Column(name = "diagnosis")
+    private String diagnosis;
 
     public TblFuzzyLabs() {
     }
@@ -200,7 +173,7 @@ public class TblFuzzyLabs implements Serializable {
         this.id = id;
     }
 
-    public TblFuzzyLabs(Integer id, String patientId, int admissionId, String gender, int age, String race, String maritalStatus, double povertyindex, String urinalysisRbc, String metabolicGlucose, String metabolicCalcium, String cbcRbcCount, String urinalysisPh, String metabolicTotalProtein, String metabolicChloride, String cbcLymphocytes, String metabolicSodium, String urinalysisSpecificGravity, String metabolicBiliTotal, String urinalysisWbc, String cbcEosinophils, String metabolicAlkPhos, String cbcRdw, String metabolicAstSgot, String cbcNeutrophils, String cbcBasophils, String cbcMonocytes, String cbcMch, String metabolicBun, String cbcWbcCount, String cbcPlateletCount, String metabolicPotassium, String metabolicAnionGap, String cbcHemoglobin, String cbcAbsoluteLymphocytes, String metabolicCarbonDioxide, String cbcAbsoluteNeutrophils, String metabolicAlbumin, String cbcMchc) {
+    public TblFuzzyLabs(Integer id, String patientId, int admissionId, String gender, int age, String race, String maritalStatus, double povertyindex, String diagnosis) {
         this.id = id;
         this.patientId = patientId;
         this.admissionId = admissionId;
@@ -209,37 +182,7 @@ public class TblFuzzyLabs implements Serializable {
         this.race = race;
         this.maritalStatus = maritalStatus;
         this.povertyindex = povertyindex;
-        this.urinalysisRbc = urinalysisRbc;
-        this.metabolicGlucose = metabolicGlucose;
-        this.metabolicCalcium = metabolicCalcium;
-        this.cbcRbcCount = cbcRbcCount;
-        this.urinalysisPh = urinalysisPh;
-        this.metabolicTotalProtein = metabolicTotalProtein;
-        this.metabolicChloride = metabolicChloride;
-        this.cbcLymphocytes = cbcLymphocytes;
-        this.metabolicSodium = metabolicSodium;
-        this.urinalysisSpecificGravity = urinalysisSpecificGravity;
-        this.metabolicBiliTotal = metabolicBiliTotal;
-        this.urinalysisWbc = urinalysisWbc;
-        this.cbcEosinophils = cbcEosinophils;
-        this.metabolicAlkPhos = metabolicAlkPhos;
-        this.cbcRdw = cbcRdw;
-        this.metabolicAstSgot = metabolicAstSgot;
-        this.cbcNeutrophils = cbcNeutrophils;
-        this.cbcBasophils = cbcBasophils;
-        this.cbcMonocytes = cbcMonocytes;
-        this.cbcMch = cbcMch;
-        this.metabolicBun = metabolicBun;
-        this.cbcWbcCount = cbcWbcCount;
-        this.cbcPlateletCount = cbcPlateletCount;
-        this.metabolicPotassium = metabolicPotassium;
-        this.metabolicAnionGap = metabolicAnionGap;
-        this.cbcHemoglobin = cbcHemoglobin;
-        this.cbcAbsoluteLymphocytes = cbcAbsoluteLymphocytes;
-        this.metabolicCarbonDioxide = metabolicCarbonDioxide;
-        this.cbcAbsoluteNeutrophils = cbcAbsoluteNeutrophils;
-        this.metabolicAlbumin = metabolicAlbumin;
-        this.cbcMchc = cbcMchc;
+        this.diagnosis = diagnosis;
     }
 
     public Integer getId() {
@@ -568,6 +511,14 @@ public class TblFuzzyLabs implements Serializable {
 
     public void setCbcMchc(String cbcMchc) {
         this.cbcMchc = cbcMchc;
+    }
+
+    public String getDiagnosis() {
+        return diagnosis;
+    }
+
+    public void setDiagnosis(String diagnosis) {
+        this.diagnosis = diagnosis;
     }
 
     @Override

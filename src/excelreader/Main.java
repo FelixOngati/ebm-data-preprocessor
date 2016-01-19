@@ -6,7 +6,9 @@
 package excelreader;
 
 import database.data.Fuzzification;
+import miner.data.DataConnection;
 import java.io.File;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
 /**
@@ -33,7 +35,13 @@ public class Main {
         //dataExport.tblLabsExport(list);
         
         Fuzzification f = new Fuzzification();
-        f.getLabsData();
+       // f.getLabsData();
+        
+        DataConnection dataConnection = new DataConnection();
+        PrintWriter out = new PrintWriter(System.out, true);
+        Double minSupport = 0.1;
+        Double minConfidence = 0.1;
+        dataConnection.dataConnect(out, minSupport, minConfidence);
         
     }
 }

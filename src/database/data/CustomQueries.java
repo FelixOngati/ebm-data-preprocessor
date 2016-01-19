@@ -5,6 +5,8 @@
  */
 package database.data;
 
+import database.persistence.TblPatientDetails;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -52,6 +54,45 @@ public class CustomQueries {
         List<Object[]> list = query.getResultList();
         
         return list;
+    }
+    
+    public String getDiagnosis(String patientId, int admissionId){
+        String diagnosis=null;
+        System.out.println(patientId);
+        TypedQuery<Object[]> query = em.createQuery(
+                "SELECT d.dcode, d.primaryDiagnosisDescription FROM TblAdmissionDiagnoses d "
+                        + "WHERE d.patientId=:patientId AND d.admissionId=:admissionId",
+                Object[].class);
+        query.setParameter("patientId", em.getReference(TblPatientDetails.class, patientId));
+        query.setParameter("admissionId", Integer.toString(admissionId));
+        List<Object[]> list = query.getResultList();
+        
+        for(Object[] obj:list){
+            diagnosis = obj[1].toString();
+        }
+     return diagnosis;
+    }
+    
+    //fetches all data from TblFuzzyLabs
+    public List<Object[]> getFuzzyLabs(){
+        TypedQuery<Object[]> query = em.createQuery(
+                "SELECT f.gender, f.age, f.race, f.maritalStatus, f.urinalysisRbc,"
+                        + "f.metabolicGlucose, f.metabolicCalcium, f.cbcRbcCount, "
+                        + "f.urinalysisPh, f.metabolicTotalProtein, f.metabolicChloride, "
+                        + "f.cbcLymphocytes, f.metabolicSodium, f.urinalysisSpecificGravity, "
+                        + "f.metabolicBiliTotal, f.urinalysisWbc, f.cbcEosinophils,"
+                        + " f.metabolicAlkPhos, f.cbcRdw, f.metabolicAstSgot, "
+                        + "f.cbcNeutrophils, f.cbcBasophils, f.cbcMonocytes, f.cbcMch, "
+                        + "f.metabolicBun, f.cbcWbcCount, f.cbcPlateletCount, "
+                        + "f.metabolicPotassium, f.metabolicAnionGap, f.cbcHematocrit, "
+                        + "f.metabolicCreatinine, f.cbcHemoglobin, f.cbcAbsoluteLymphocytes, "
+                        + "f.metabolicCarbonDioxide, f.cbcAbsoluteNeutrophils, "
+                        + "f.metabolicAlbumin, f.cbcMchc, f.diagnosis FROM TblFuzzyLabs f", 
+                Object[].class        
+        );
+        List<Object[]> fuzzyLabsList = query.getResultList();
+        
+        return fuzzyLabsList;
     }
 
 }

@@ -1,4 +1,4 @@
-package java.valueObjects;
+package miner.valueObjects;
 
 import java.util.Set;
 
