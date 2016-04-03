@@ -4,6 +4,7 @@ import excelreader.DataExport;
 import miner.mining.helper.DataHelper;
 import miner.mining.helper.FileHelper;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -91,9 +92,14 @@ public class Apriori {
 	 * @param associations
 	 */
 	private void printAssociations(ArrayList<AssociationValueObject> associations) {
+            DecimalFormat df = new DecimalFormat("#.##");
+            double support;
+            double confidence;
             DataExport dataExport = new DataExport();
 		for (AssociationValueObject obj: associations) {
-                        dataExport.savetRule(stringify(obj.getLhs()) + " => "+ stringify(obj.getRhs()), ((float)(obj.getConfidence()*100)), ((float)(obj.getSupport()*100)));
+                    confidence = Double.valueOf(df.format(obj.getConfidence()*100));
+                    support = Double.valueOf(df.format(obj.getSupport()*100));
+                        dataExport.savetRule(stringify(obj.getLhs()) + " => "+ stringify(obj.getRhs()),(float)confidence,(float)support );
 			System.out.println(stringify(obj.getLhs()) + " => "+ stringify(obj.getRhs()) + " conf:"+obj.getConfidence()*100+ "% supp:" + obj.getSupport()*100+ "% ");
 		}
 	}

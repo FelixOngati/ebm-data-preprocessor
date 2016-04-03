@@ -44,7 +44,7 @@ public class Main {
 //        dataConnection.dataConnect(out, minSupport, minConfidence);
 
         String filename = "tblFuzzyLabs.csv";
-        Double minSupport = 0.5;
+        Double minSupport = 0.7;
         Double minConfidence = 0.8;
         DataHelper.init(minSupport, minConfidence);
         Apriori aprioriHelper = new Apriori();
