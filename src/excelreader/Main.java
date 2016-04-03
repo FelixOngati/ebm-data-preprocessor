@@ -11,7 +11,6 @@ import miner.data.DataConnection;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import miner.mining.helper.DataHelper;
 
 /**
@@ -44,9 +43,9 @@ public class Main {
         PrintWriter out = new PrintWriter(System.out, true);
 //        dataConnection.dataConnect(out, minSupport, minConfidence);
 
-        String filename = "INTEGRATED-DATASET-1.csv";
-        Double minSupport = 0.1;
-        Double minConfidence = 0.3;
+        String filename = "tblFuzzyLabs.csv";
+        Double minSupport = 0.5;
+        Double minConfidence = 0.8;
         DataHelper.init(minSupport, minConfidence);
         Apriori aprioriHelper = new Apriori();
 

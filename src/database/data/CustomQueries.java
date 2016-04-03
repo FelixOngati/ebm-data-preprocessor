@@ -6,11 +6,11 @@
 package database.data;
 
 import database.persistence.TblPatientDetails;
-import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 /**
@@ -93,6 +93,17 @@ public class CustomQueries {
         List<Object[]> fuzzyLabsList = query.getResultList();
         
         return fuzzyLabsList;
+    }
+    
+    /**
+     * Truncates table
+     * @param tableName
+     */
+    public void truncateTable(String tableName){
+        Query query = em.createQuery(
+                "truncate "+tableName
+        );
+        query.executeUpdate();
     }
 
 }

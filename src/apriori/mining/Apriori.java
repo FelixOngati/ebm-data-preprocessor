@@ -1,5 +1,6 @@
 package apriori.mining;
 
+import excelreader.DataExport;
 import miner.mining.helper.DataHelper;
 import miner.mining.helper.FileHelper;
 import java.io.IOException;
@@ -7,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import miner.valueObjects.AssociationValueObject;
@@ -51,8 +53,8 @@ public class Apriori {
 			currentItemSet = getNextLevelItemSet(currentItemSet);
 		}
 		System.out.println();
-		System.out.println("==Large itemsets ( min_support="+ minSupport*100 + "% )");
-		printLargeItemSet();
+//		System.out.println("==Large itemsets ( min_support="+ minSupport*100 + "% )");
+//		printLargeItemSet();
 		System.out.println();
 		System.out.println("==High-confidence association rules"+ "( min_conf="+minConfidence*100 + "% )");
 		generateAssociationRules(minConfidence);
@@ -89,13 +91,15 @@ public class Apriori {
 	 * @param associations
 	 */
 	private void printAssociations(ArrayList<AssociationValueObject> associations) {
+            DataExport dataExport = new DataExport();
 		for (AssociationValueObject obj: associations) {
-			System.out.println(obj.getLhs() + " => "+ obj.getRhs() + " (conf:"+obj.getConfidence()*100+ "% supp:" + obj.getSupport()*100+ "% )");
+                        dataExport.savetRule(stringify(obj.getLhs()) + " => "+ stringify(obj.getRhs()), ((float)(obj.getConfidence()*100)), ((float)(obj.getSupport()*100)));
+			System.out.println(stringify(obj.getLhs()) + " => "+ stringify(obj.getRhs()) + " conf:"+obj.getConfidence()*100+ "% supp:" + obj.getSupport()*100+ "% ");
 		}
 	}
 
 	/**
-	 * Print the Large itemsets
+	 * Print the Large item sets
 	 */
 	public void printLargeItemSet() {
 		ArrayList<LargeItemSetVO> set = new ArrayList<LargeItemSetVO>(DataHelper.getLargeItemSetWithSupport());
@@ -127,5 +131,19 @@ public class Apriori {
 		largeItemSet.addAll(nextLevel);
 		return nextLevel;
 	}
+        
+        /**
+         * Convert a set to string literal
+         * @param set
+         */
+        public String stringify(Iterable<? extends CharSequence> set){
+            Iterator<? extends CharSequence> iterator = set.iterator();
+            if(!iterator.hasNext())
+                return "";
+            StringBuilder builder = new StringBuilder(iterator.next());
+            while(iterator.hasNext())
+                builder.append(", ").append(iterator.next());
+            return builder.toString().replace("\"", "");
+        }
 	
 }

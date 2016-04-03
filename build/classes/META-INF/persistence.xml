@@ -8,6 +8,7 @@
     <class>database.persistence.TblLabs</class>
     <class>database.persistence.TblAdmissions</class>
     <class>database.persistence.TblFuzzyLabs</class>
+    <class>database.persistence.TblAssociationRules</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/ebm_project?zeroDateTimeBehavior=convertToNull"/>
       <property name="javax.persistence.jdbc.password" value="password"/>

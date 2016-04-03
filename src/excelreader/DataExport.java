@@ -6,6 +6,7 @@ package excelreader;
  */
 import database.persistence.TblAdmissionDiagnoses;
 import database.persistence.TblAdmissions;
+import database.persistence.TblAssociationRules;
 import database.persistence.TblICD10;
 import database.persistence.TblLabs;
 import database.persistence.TblPatientDetails;
@@ -245,5 +246,24 @@ public class DataExport {
         em.getTransaction().commit();
         //em.close();
         //emf.close();
+    }
+    
+    /**
+     * inserts a rule, its confidence
+     * and support into db
+     * @param newrule
+     * @param confidence
+     * @param support
+     */
+    public void savetRule(String newrule, float confidence, float support){
+        em.getTransaction().begin();
+        TblAssociationRules rule  = new TblAssociationRules();
+        rule.setRule(newrule);
+        rule.setConfidence(confidence);
+        rule.setSupport(support);
+        rule.setRating(0f);
+        em.persist(rule);
+        em.getTransaction().commit();
+        
     }
 }
