@@ -6,6 +6,8 @@
 package database.data;
 
 import database.persistence.TblPatientDetails;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -30,6 +32,34 @@ public class CustomQueries {
         List<Object[]> list = query.getResultList();
         return list;
     }
+    
+    //fetch distinct hiv lab tests from TblLabs
+    public List<Object[]> getDistinctHivLabs() {
+
+        TypedQuery<Object[]> query = em.createQuery(
+                "select distinct e.patientid, e.orderedbydate from Hivlabs e", Object[].class);
+        List<Object[]> list = query.getResultList();
+        return list;
+    }
+   
+    public List<Object[]> getDistinctHivLabsByGender(String gender) {
+
+        TypedQuery<Object[]> query = em.createQuery(
+                "select distinct e.patientid, e.orderedbydate from Hivlabs e"
+                        + " INNER JOIN Hivpatients p ON e.patientid = p.patientid WHERE p.gender=:gender", Object[].class);
+        query.setParameter("gender",gender);
+        List<Object[]> list = query.getResultList();
+        return list;
+    }
+    
+    public List<Object[]> getDistinctFuzzyLabs() {
+
+        TypedQuery<Object[]> query = em.createQuery(
+                "select distinct e.patientid, e.labdate from Hivfuzzylabs e", Object[].class);
+        query.setMaxResults(5000);
+        List<Object[]> list = query.getResultList();
+        return list;
+    }
 
     public List<Object[]> getLabs(String patientId, String admissionId) {
         TypedQuery<Object[]> query = em.createQuery(
@@ -42,6 +72,18 @@ public class CustomQueries {
         List<Object[]> list = query.getResultList();
         return list;
     }
+    
+    public List<Object[]> getHivLabs(String patientId, Date date) {
+        TypedQuery<Object[]> query = em.createQuery(
+                "select p.patientid, p.sitecode, p.orderedbydate, p.testname, p.testresult"
+                + " from Hivlabs p  where p.patientid = :patientId "
+                + "and p.orderedbydate = :date", Object[].class);
+        query.setParameter("patientId", patientId);
+        query.setParameter("date", date);
+        List<Object[]> list = query.getResultList();
+        return list;
+    }    
+   
     
     public List<Object[]> getPatientDetails(String patientId){
         TypedQuery<Object[]> query = em.createQuery(
@@ -71,6 +113,15 @@ public class CustomQueries {
             diagnosis = obj[1].toString();
         }
      return diagnosis;
+    }
+    
+    public String getGender(String patientId){
+        Query query = em.createQuery(
+                "SELECT d.gender FROM Hivpatients d WHERE d.patientid=:patientId");
+        query.setParameter("patientId", patientId);
+        query.setMaxResults(1);
+        String g = (String) query.getSingleResult();
+        return g;
     }
     
     //fetches all data from TblFuzzyLabs
@@ -105,5 +156,35 @@ public class CustomQueries {
         );
         query.executeUpdate();
     }
+
+    public List<Object[]> getFuzzyLabs(String patientId, Date date) {
+        TypedQuery<Object[]> query = em.createQuery(
+                "select p.testname, p.fuzzyclass"
+                + " from Hivfuzzylabs p  where p.patientid = :patientId "
+                + "and p.labdate = :date", Object[].class);
+        query.setParameter("patientId", patientId);
+        query.setParameter("date", date);
+        List<Object[]> list = query.getResultList();
+        return list;
+    }    
+
+    public String getRegion(String patientId) {
+        Query query = em.createQuery(
+                "SELECT d.region FROM Hivpatients d WHERE d.patientid=:patientId");
+        query.setParameter("patientId", patientId);
+        query.setMaxResults(1);
+        String g = (String) query.getSingleResult();
+        return g;
+    }
+
+    public String getMaritalStatus(String patientId) {
+        Query query = em.createQuery(
+                "SELECT d.maritalstatus FROM Hivpatients d WHERE d.patientid=:patientId");
+        query.setParameter("patientId", patientId);
+        query.setMaxResults(1);
+        String g = (String) query.getSingleResult();
+        return g;
+    }
+     
 
 }

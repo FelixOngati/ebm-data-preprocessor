@@ -9,6 +9,13 @@
     <class>database.persistence.TblAdmissions</class>
     <class>database.persistence.TblFuzzyLabs</class>
     <class>database.persistence.TblAssociationRules</class>
+    <class>database.persistence.Hivlabs</class>
+    <class>database.persistence.Hivartpatients</class>
+    <class>database.persistence.Hivpatients</class>
+    <class>database.persistence.Hivpatientsstatus</class>
+    <class>database.persistence.Hivpharmacy</class>
+    <class>database.persistence.Hivfuzzylabs</class>
+    <class>database.persistence.Hivgeneralrules</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/ebm_project?zeroDateTimeBehavior=convertToNull"/>
       <property name="javax.persistence.jdbc.password" value="password"/>

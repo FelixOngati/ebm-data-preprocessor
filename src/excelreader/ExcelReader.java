@@ -10,8 +10,8 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.poifs.filesystem.POIFSFileSystem;
+import org.apache.poi.openxml4j.opc.OPCPackage;
+import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.DateUtil;
 
 /**
@@ -22,24 +22,26 @@ import org.apache.poi.ss.usermodel.DateUtil;
 public class ExcelReader {
     
     private final File file;
+    DataFormatter formatter = new DataFormatter();
     public ExcelReader(File file){
         this.file = file;
     }
 
 
     public ArrayList<ArrayList<Object>> getRowAsListFromExcel() {
-        ArrayList<ArrayList<Object>> rowaslist = new ArrayList();
+        ArrayList<ArrayList<Object>> rowaslist = new ArrayList();        
         FileInputStream fis; 
         Workbook workbook = null;
         int maxDataCount = 0;
         try {
             String fileExtension = file.toString().substring(file.toString().indexOf("."));
-            fis = new FileInputStream(file);
+            OPCPackage oPCPackage = OPCPackage.open(file);
             //use xssf for xlsx format else hssf for xls format
             if(fileExtension.equals(".xlsx")){
-                workbook = new XSSFWorkbook(fis);
+                workbook = new XSSFWorkbook(oPCPackage);
             }else if(fileExtension.equals(".xls")){
-                workbook = new HSSFWorkbook(new POIFSFileSystem(fis));
+//                workbook = new HSSFWorkbook(new POIFSFileSystem(fis));
+                System.err.println("Wrong file type selected!");
             }else{
                 System.err.println("Wrong file type selected!");
             }
@@ -53,16 +55,16 @@ public class ExcelReader {
                 Iterator rowIterator = sheet.iterator();
                 
                 //iterating over each row
+                int c = 1;
                 while(rowIterator.hasNext()){
                    Row row = (Row) rowIterator.next();
-                   
+                   ArrayList<Object> singleRows = new  ArrayList<>();
                    //skip the first row because it will be header
                    if(row.getRowNum() == 0){
                        maxDataCount = row.getLastCellNum();
                        continue;
-                   }
-                   
-                  ArrayList<Object> singleRows = new  ArrayList<Object>();
+                   }                  
+                  
                   
                   /*for each row, iterate through all the columns*/
                   for(int cn = 0; cn < maxDataCount; cn++){
@@ -72,7 +74,8 @@ public class ExcelReader {
                               if(DateUtil.isCellDateFormatted(cell)){
                                    singleRows.add(cell.getDateCellValue());
                               }else{
-                                  singleRows.add(cell.getNumericCellValue());
+                                  String data = formatter.formatCellValue(cell);
+                                  singleRows.add(data);
                               }
                           break;
                           case Cell.CELL_TYPE_STRING:
@@ -85,7 +88,9 @@ public class ExcelReader {
                               singleRows.add(cell.getStringCellValue());
                       }
                   }
+                    System.out.println(c++ +"   "+singleRows);
                   rowaslist.add(singleRows);
+//                  singleRows.clear();
                 }
             }
           workbook.close();

@@ -96,11 +96,12 @@ public class Apriori {
             double support;
             double confidence;
             DataExport dataExport = new DataExport();
+            int i = 0;
 		for (AssociationValueObject obj: associations) {
                     confidence = Double.valueOf(df.format(obj.getConfidence()*100));
                     support = Double.valueOf(df.format(obj.getSupport()*100));
-                        dataExport.savetRule(stringify(obj.getLhs()) + " => "+ stringify(obj.getRhs()),(float)confidence,(float)support );
-			System.out.println(stringify(obj.getLhs()) + " => "+ stringify(obj.getRhs()) + " conf:"+obj.getConfidence()*100+ "% supp:" + obj.getSupport()*100+ "% ");
+                        dataExport.saveGeneralHivRule(stringify(obj.getLhs()) + " => "+ stringify(obj.getRhs()),(double)confidence,(double)support );
+			System.out.println(++i+"     "+stringify(obj.getLhs()) + " => "+ stringify(obj.getRhs()) + " conf:"+obj.getConfidence()*100+ "% supp:" + obj.getSupport()*100+ "% ");
 		}
 	}
 
